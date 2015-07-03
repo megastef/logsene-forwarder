@@ -1,12 +1,13 @@
-FROM iojs:onbuild
+FROM iojs:2.3
 RUN apt-get install git -y 
-RUN apt-get install libzmq1
+# RUN apt-get install libzmq-dev
+RUN apt-get install git -y
 RUN git clone https://github.com/bpaquet/node-logstash.git
 WORKDIR node-logstash
 RUN npm i -g 
-ADD ./run.sh /run.sh
-RUN chmod +x /run.sh
-EXPOSE tcp:9000
-EXPOSE tcp:514
-EXPOSE udp:514
-ENTRYPOINT  ["/run.sh server"]
+WORKDIR /
+ADD ./run.sh /bin/logsene
+RUN chmod +x /bin/logsene
+EXPOSE 10000 10001 514
+ENTRYPOINT ["logsene"]
+CMD ["service"]

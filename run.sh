@@ -1,5 +1,5 @@
+#!/bin/bash
 set -e
-export LOGSENE_TOKEN="2bcdc8c9-d48e-4c7e-b928-b0ca69f4c6f1"
 	
 if [ $1 == "service" ]; then
 	# TCP Input lines

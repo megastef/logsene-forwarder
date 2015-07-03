@@ -5,7 +5,7 @@ if [ $1 == "service" ]; then
 	# TCP Input lines
 	export TCP_LINE_INPUT="input://tcp://0.0.0.0:10000"
 	export GROK_LINE="filter://grok://?grok=%{GREEDYDATA:message}" 
-	export LOGSENE_OUTPUT="output://elasticsearch://logsene-receiver.sematext.com:443?index_name=${LOGSENE_TOKEN}&ssl=true"
+	export LOGSENE_OUTPUT="output://elasticsearch://logsene-receiver.sematext.com:443?index_name=${LOGSENE_TOKEN}&ssl=true&bulk_size=100&bulk_time=500"
 
 	echo listening on TCP 10000 for text input
 	echo node-logstash-agent $TCP_LINE_INPUT $GROK_LINE $LOGSENE_OUTPUT &
@@ -20,11 +20,11 @@ if [ $1 == "service" ]; then
 	echo node-logstash-agent $TCP_JSON_INPUT $TCP_JSON_FILTER $TCP_JSON_FILTER2 $LOGSENE_OUTPUT &
 	node-logstash-agent $TCP_JSON_INPUT $TCP_JSON_FILTER $TCP_JSON_FILTER2 $LOGSENE_OUTPUT &
 
-	echo listening on TCP 1514 for syslog input
-	export SYSLOG_UDP_INPUT="input://udp://0.0.0.0:1514?type=syslog"
-	export SYSLOG_FILTERS="filter://regex://syslog?only_type=syslog filter://syslog_pri://?only_type=syslog"
-	echo node-logstash-agent $SYSLOG_UDP_INPUT $LOGSENE_OUTPUT &
-	node-logstash-agent $SYSLOG_UDP_INPUT $LOGSENE_OUTPUT 
+	echo listening on TCP 514 for syslog input
+	export SYSLOG_TCP_INPUT="input://tcp://0.0.0.0:514?type=syslog"
+	export SYSLOG_FILTERS="filter://regex://syslog?only_type=syslog filter://syslog_pri://?only_type=syslog filter://geoip://host filter://reverse_dns://host"
+	echo node-logstash-agent $SYSLOG_TCP_INPUT $SYSLOG_FILTERS $LOGSENE_OUTPUT &
+	node-logstash-agent $SYSLOG_TCP_INPUT $SYSLOG_FILTERS $LOGSENE_OUTPUT 
 fi	
 
 if [ $1 == "json" ]; then 

@@ -12,8 +12,8 @@ if [ $1 == "service" ]; then
 	node-logstash-agent --http_max_sockets 1 $TCP_LINE_INPUT $GROK_LINE $LOGSENE_OUTPUT &
 
 	export TCP_JSON_INPUT="input://tcp://0.0.0.0:10001?type=tcp_json"
-	# We use bunyan as "default" fomrat, it adds all JSON fields
-	# but if bunan is the input we map "msg" and "time" to "message" / "@timestamp"
+	# We use bunyan as "default" format, it adds all JSON fields
+	# but if bunyan is the input we map "msg" and "time" to "message" / "@timestamp"
 	export TCP_JSON_FILTER="filter://bunyan://"
 	export TCP_JSON_FILTER2="filter://compute_field://message?value=#{msg} filter://compute_field://@timestamp?value=#{time}"
 

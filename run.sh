@@ -22,7 +22,7 @@ if [ $1 == "service" ]; then
 
 	echo listening on TCP 514 for syslog input
 	export SYSLOG_TCP_INPUT="input://tcp://0.0.0.0:514?type=syslog"
-	export SYSLOG_FILTERS="filter://regex://syslog_no_prio filter://geoip://host filter://reverse_dns://host"
+	export SYSLOG_FILTERS="filter://regex://syslog_no_prio"
 	echo node-logstash-agent $SYSLOG_TCP_INPUT $SYSLOG_FILTERS $LOGSENE_OUTPUT &
 	node-logstash-agent --http_max_sockets 1  $SYSLOG_TCP_INPUT $SYSLOG_FILTERS $LOGSENE_OUTPUT 
 fi	

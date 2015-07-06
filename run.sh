@@ -20,10 +20,10 @@ if [ $1 == "service" ]; then
 	echo node-logstash-agent $TCP_JSON_INPUT $TCP_JSON_FILTER $TCP_JSON_FILTER2 $LOGSENE_OUTPUT &
 	node-logstash-agent --http_max_sockets 1 $TCP_JSON_INPUT $TCP_JSON_FILTER $TCP_JSON_FILTER2 $LOGSENE_OUTPUT &
 
-	echo listening on TCP 514 for syslog input
-	export SYSLOG_TCP_INPUT="input://tcp://0.0.0.0:514?type=syslog"
-	export SYSLOG_FILTERS="filter://regex://syslog_no_prio"
-	echo node-logstash-agent $SYSLOG_TCP_INPUT $SYSLOG_FILTERS $LOGSENE_OUTPUT &
+	echo listening on UDP 514 for syslog input
+	export SYSLOG_UDP_INPUT="input://udp://0.0.0.0:514?type=syslog"
+	export SYSLOG_FILTERS="filter://regex://syslog?only_type=syslog filter://syslog_pri://?only_type=syslog"
+	echo node-logstash-agent $SYSLOG_UDP_INPUT $SYSLOG_FILTERS $LOGSENE_OUTPUT &
 	node-logstash-agent --http_max_sockets 1  $SYSLOG_TCP_INPUT $SYSLOG_FILTERS $LOGSENE_OUTPUT 
 fi	
 

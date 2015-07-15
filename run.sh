@@ -2,7 +2,7 @@
 set -e
 # Expect ENV var LOGSENE_TOKEN !!!
 
-if [ $1 == "service" ]; then
+if [ "$1" == "service" ]; then
 	# TCP Input lines
 	export TCP_LINE_INPUT="input://tcp://0.0.0.0:10000"
 	export GROK_LINE="filter://grok://?grok=%{GREEDYDATA:message}" 
@@ -26,7 +26,7 @@ if [ $1 == "service" ]; then
 	node-logstash-agent --http_max_sockets 1  $SYSLOG_TCP_INPUT $SYSLOG_FILTERS $LOGSENE_OUTPUT 
 fi	
 
-if [ $1 == "json" ]; then 
+if [ "$1" == "json" ]; then 
 	node-logstash-agent input://stdin:// $TCP_JSON_FILTER $TCP_JSON_FILTER2 $LOGSENE_OUTPUT
 else 
 	node-logstash-agent input://stdin:// $GROK_LINE $LOGSENE_OUTPUT
